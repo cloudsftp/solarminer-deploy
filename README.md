@@ -19,11 +19,13 @@ docker compose --profile all up -d
 
 ## SSL
 
+Currently not in use
+
 To enable SSL, use `nginx` as a reverse proxy.
 
-1. Link `lowkey-api.conf` to `/etc/nginx/conf.d/lowkey-api.conf`
+1. Link `solarminer-api.conf` to `/etc/nginx/conf.d/solarminer-api.conf`
 
-`sudo ln -s $(pwd)/lowkey-api.conf /etc/nginx/conf.d/lowkey-api.conf`
+`sudo ln -s $(pwd)/solarminer-api.conf /etc/nginx/conf.d/solarminer-api.conf`
 
 2. Reload the config with `sudo nginx -t`
 3. Restart `nginx` with `sudo systemctl restart nginx`

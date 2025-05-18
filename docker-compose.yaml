@@ -1,16 +1,34 @@
 services:
+  service:
+    image: ghcr.io/cloudsftp/solarminer-service:latest
+    volumes:
+      - .env:/.env
+
   timescaledb:
     image: timescale/timescaledb:latest-pg16
     ports:
-      - "5432:5432"
+      - "6681:5432"
     volumes:
       - ~/timescaledb_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
-  service:
-    image: ghcr.io/cloudsftp/botificator-service:latest
-    #ports:
-    #  - "6680:6680"
+  nats:
+    image: nats:latest
+    ports:
+      - "6682:4222" # Client connections
+      - "6683:6222" # Routes
+      - "6684:8222" # Monitoring
+    command: "--name main --jetstream --http_port 8222"
     volumes:
-      - .env:/.env
+      - ~/jetstream-data:/tmp/nats/jetstream
+    healthcheck:
+      test: ["CMD-SHELL", "nats-server --version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
