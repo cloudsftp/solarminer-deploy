@@ -3,6 +3,12 @@ services:
     image: ghcr.io/cloudsftp/solarminer-service:latest
     volumes:
       - .env:/.env
+    depends_on:
+      nats:
+        condition: service_started
+    #    condition: service_healthy
+      timescaledb:
+        condition: service_healthy
 
   timescaledb:
     image: timescale/timescaledb:latest-pg16
@@ -14,8 +20,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 5
 
   nats:
@@ -24,13 +30,13 @@ services:
       - "6682:4222" # Client connections
       - "6683:6222" # Routes
       - "6684:8222" # Monitoring
-    command: "--name main --jetstream --http_port 8222 --tls --tlscert /cert.pem --tlskey /key.pem"
+    command: "--name main --jetstream --http_port 8222 --tls --tlscert /cert.pem --tlskey /key.pem --auth ${NATS_PASSWORD}"
     volumes:
       - ~/jetstream-data:/tmp/nats/jetstream
       - /etc/letsencrypt/live/solarminer.energiesandsuch.com/fullchain.pem:/cert.pem
       - /etc/letsencrypt/live/solarminer.energiesandsuch.com/privkey.pem:/key.pem
-    healthcheck:
-      test: ["CMD-SHELL", "nats-server --version"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    #healthcheck:
+    #  test: ["CMD-SHELL", "nats-server --version"]
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 3
