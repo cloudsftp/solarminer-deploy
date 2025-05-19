@@ -16,7 +16,7 @@ services:
     volumes:
       - ~/timescaledb_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${TIMESCALEDB_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
@@ -29,8 +29,9 @@ services:
       - "6682:4222" # Client connections
       - "6683:6222" # Routes
       - "6684:8222" # Monitoring
-    command: "--name main --jetstream --http_port 8222 --tls --tlscert /cert.pem --tlskey /key.pem --auth ${NATS_PASSWORD}"
+    command: "-c /nats.conf --auth ${NATS_PASSWORD}"
     volumes:
       - ~/jetstream-data:/tmp/nats/jetstream
       - /etc/letsencrypt/live/solarminer.energiesandsuch.com/fullchain.pem:/cert.pem
       - /etc/letsencrypt/live/solarminer.energiesandsuch.com/privkey.pem:/key.pem
+      - ./nats.conf:/nats.conf
