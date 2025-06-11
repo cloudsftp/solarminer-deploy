@@ -8,6 +8,7 @@ services:
         condition: service_started
       timescaledb:
         condition: service_healthy
+    restart: unless-stopped
 
   timescaledb:
     image: timescale/timescaledb:latest-pg16
@@ -22,6 +23,7 @@ services:
       interval: 3s
       timeout: 2s
       retries: 5
+    restart: unless-stopped
 
   nats:
     image: nats:latest
@@ -35,3 +37,4 @@ services:
       - /etc/letsencrypt/live/solarminer.energiesandsuch.com/fullchain.pem:/cert.pem
       - /etc/letsencrypt/live/solarminer.energiesandsuch.com/privkey.pem:/key.pem
       - ./nats.conf:/nats.conf
+    restart: unless-stopped
