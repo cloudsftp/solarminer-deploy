@@ -31,7 +31,7 @@ services:
       - "6682:4222" # Client connections
       - "6683:6222" # Routes
       - "6684:8222" # Monitoring
-    command: "-c /nats.conf --auth ${NATS_PASSWORD}"
+    command: "-c /nats.conf --auth ${NATS_TOKEN}"
     volumes:
       - ~/jetstream-data:/tmp/nats/jetstream
       - /etc/letsencrypt/live/solarminer.energiesandsuch.com/fullchain.pem:/cert.pem
