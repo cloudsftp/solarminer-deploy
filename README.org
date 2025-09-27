@@ -23,17 +23,12 @@ docker compose --profile all up -d
 
 TODO: automate with nginx
 
-**** Obtain
+**** Obtain and Renew
 
 #+begin_src shell
 sudo certbot -d '*.energiesandsuch.com' --manual certonly
 #+end_src
 
-**** Renew
-
-#+begin_src bash
-sudo certbot renew
-#+end_src
 
 *** API (Currently not in use)
 
