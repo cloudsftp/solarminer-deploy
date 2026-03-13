@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
 
   timescaledb:
-    image: timescale/timescaledb:latest-pg16
+    image: timescale/timescaledb:latest-pg17
     ports:
       - "6681:5432"
     volumes:
@@ -34,7 +34,7 @@ services:
     command: "-c /nats.conf --auth ${NATS_TOKEN}"
     volumes:
       - ~/jetstream-data:/tmp/nats/jetstream
-      - /etc/letsencrypt/live/solarminer.energiesandsuch.com/fullchain.pem:/cert.pem
-      - /etc/letsencrypt/live/solarminer.energiesandsuch.com/privkey.pem:/key.pem
+      - /etc/letsencrypt/live/solarminer.energiesandsuch.com-0003/fullchain.pem:/cert.pem
+      - /etc/letsencrypt/live/solarminer.energiesandsuch.com-0003/privkey.pem:/key.pem
       - ./nats.conf:/nats.conf
     restart: unless-stopped
